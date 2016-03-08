@@ -1,7 +1,6 @@
 # variaveis
-INCLUDES = func.h
-SOURCES = func.c main.c
-OBJFILES = func.o main.o
+SOURCES = main.c
+OBJFILES = main.o
 EXEC = pmedia
 
 # regras de sufixo
