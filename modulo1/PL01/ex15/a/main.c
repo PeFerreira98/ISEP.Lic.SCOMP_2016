@@ -16,7 +16,7 @@ int main(int argc, char* argv[]){
 		
 		if(p[i-1] == 0){
 			ret = execlp (argv[i], argv[i], NULL);
-			printf("%s : é um comando inválido\n", argv[i]);
+			printf("%s : command not found\n", argv[i]);
 			exit(0);
 		}
 		i++;

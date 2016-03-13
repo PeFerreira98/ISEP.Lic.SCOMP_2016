@@ -2,45 +2,29 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
-int main(void){
+int main(int argc, char* argv[]){
 	
-	pid_t p[5];
-	int tamanho = 100, valor = 99, aux = 80, aux2 = 0;
+	pid_t p[argc-1];
+	int ret, i = 1, estado;
 	
-	int vec[tamanho], i,j, estado;
-	
-	for(i = 0; i < tamanho;i ++){
-		vec[i] = i;
-	}
-	
-	for(i = 0; i < 5; i++){
-		p[i] = fork();
+	while(i < argc){
 		
-		if(p[i] == 0){
-			for(j = aux2; j < tamanho-aux; j++){
-				if(valor == vec[j]){
-					printf("Posição no vector: %d\n", j);
-					exit(i+1);
-					break;
-				}
-			}
+		p[i-1] = fork();
+		
+		if(p[i-1] == 0){
+			char *cmd[] = {argv[i], (char*)NULL};
+			ret = execvp (argv[i], cmd);
+			printf("%s : command not found\n", argv[i]);
 			exit(0);
 		}
-		aux = aux - 20;
-		aux2 = aux2 + 20;
+		i++;
 	}
 	
-	for(i = 0; i < 5; i++){
-
+	for(i = 0; i < argc-1; i++){
 		waitpid(p[i], &estado, 0);
-
-		if(WIFEXITED(estado)){
-			if(WEXITSTATUS(estado) != 0){
-				printf("processo nº: %d \n", WEXITSTATUS(estado));
-			}
-		}
 	}
 	
 	return 0;
