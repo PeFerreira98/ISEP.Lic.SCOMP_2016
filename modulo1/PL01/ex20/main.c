@@ -11,23 +11,32 @@ int main(){
 	int quantia = 25, nr, nrB, aposta;
 	
 	while (quantia > 0){
-		
-		printf("Número: ");
+		printf("Número (1-5): ");
 		scanf("%d", &nr);
+		
 		printf("Valor a apostar: ");
 		scanf("%d", &aposta);
-		quantia = quantia - aposta;
 		
-		nrB = batota();
-		printf("Numero saido: %d\n", nrB);	
+		if(aposta <= quantia){
+			quantia = quantia - aposta;
 		
-		if(nr == nrB){
-			printf("Parabéns, acertou!! +%d€ para a sua carteira\n", aposta);
-			quantia = quantia + aposta*2;
+			nrB = batota();
+			printf("Numero saido: %d\n", nrB);	
+		
+			if(nr == nrB){
+				printf("Parabéns, acertou!! +%d€ para a sua carteira\n", aposta);
+				quantia = quantia + aposta*2;
+			}
 		}
-		printf("Carteira = %d€\n", quantia);		
 		
+		else{
+			printf("Não tem dinheiro suficiente para fazer a aposta!\n");
+		} 
+			
+		printf("Carteira = %d€\n\n", quantia);		
 	}
+	
+	printf("GAME OVER!\n");
 	
 	return 0;
 }
