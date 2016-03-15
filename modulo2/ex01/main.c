@@ -22,8 +22,9 @@ int main(void){
 	}	
 	if(p==0){
 		int x;
-		read(fd[0], &x, sizeof(int));
+		
 		close(fd[1]);
+		read(fd[0], &x, sizeof(int));
 		printf("Pid atraves do filho = %d\n",x);
 		close(fd[0]);
 		exit(0);
