@@ -13,18 +13,14 @@ int main(void){
 	
 	pid_t p[NUM_PROC];
 	int matrix[NUM_PROC][2];
-	int fd[2];
 	int vec1[NUM_ELEM], vec2[NUM_ELEM], i, j, aux, tot=0, estado;
 	
 	for(i = 0; i < NUM_ELEM; i++){//Preencher vectores
 		vec1[i] = 1;
-		vec2[i] = 1;
+		vec2[i] = 2;
 	}
 	for(i = 0; i < NUM_PROC; i++){
-		matrix+i = fd;
-	}
-	for(i = 0; i < NUM_PROC; i++){
-		pipe(*(matrix+i));
+		pipe(matrix[i]);
 	}
 	
 	for(i = 0; i < NUM_PROC; i++){
@@ -32,15 +28,15 @@ int main(void){
 		p[i] = fork();
 		if(p[i] == 0){
 			int total;
-			close(fd[0]);
+			close(matrix[i][0]);
 			for(j = ((NUM_ELEM/NUM_PROC)*i); j < ((NUM_ELEM/NUM_PROC)*i +(NUM_ELEM/NUM_PROC)); j++){
 				total += vec1[j] + vec2[j];
 			}
-			write(matrix+i+1, &total, sizeof(int));
-			close(matrix+i+1);
+			write(matrix[i][1], &total, sizeof(int));
+			close(matrix[i][1]);
 			exit(0);				
 		}
-		read(matrix+i,&aux,sizeof(int));		
+		read(matrix[i][0],&aux,sizeof(int));		
 		tot = tot + aux;
 	}
 	
