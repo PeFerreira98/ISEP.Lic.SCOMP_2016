@@ -19,3 +19,4 @@ d) Organizacao do diretorio de cada aula.
 - Dentro do diretorio de cada módulo deve ser criado um subdiretorio para cada exercicio.
 - O nome desse subdiretorio deve iniciar pelas letras "ex" e ser seguido do numero que identifica o exercicio. Ex: "ex01"
   
+Submission closed for class modulo2
