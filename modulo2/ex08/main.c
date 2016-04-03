@@ -15,36 +15,53 @@ typedef struct{
 	int quantidade;
 }registo;
 
+void regInit(registo *vecReg){
+	int i;
+	for (i = 0; i < NUM_ELEM; i++)
+	{
+		vecReg[i].codigo_produto = rand()%200+1;
+		vecReg[i].codigo_cliente = rand()%100+1;
+		vecReg[i].quantidade = rand()%30+1;
+	}
+}
+
+void regZeroInit(registo *vecReg){
+	int i;
+	for (i = 0; i < NUM_ELEM; i++)
+	{
+		vecReg[i].codigo_produto = 0;
+		vecReg[i].codigo_cliente = 0;
+		vecReg[i].quantidade = 0;
+	}
+}
+
+void regPrint(registo *vecReg){
+	registo rt;
+	int i;
+	for (i = 0; i < NUM_ELEM; i++)
+	{
+		rt = vecReg[i];
+		printf("Reg %d, Pr: %d, Cli: %d, Qua: %d\n", i, rt.codigo_produto, rt.codigo_cliente, rt.quantidade);
+	}
+}
+
 int main(void){
 	
 	pid_t p[NUM_PROC];
-	int fd[2], amp = NUM_ELEM/NUM_PROC, i, j, estado;
-	registo r1, r2, r3, vec[NUM_ELEM],rAux;
+	int fd[2];
+	int amp = NUM_ELEM/NUM_PROC, i, j, estado, k=0;
+	registo vec[NUM_ELEM], maiores[NUM_ELEM], rAux;
 	
-	//Falta metodo preencheVector()
-	r1.codigo_cliente = 2;
-	r1.codigo_produto = 1;
-	r1.quantidade = 10;
+	regInit(vec); //Inicializar vector de registos
+	regZeroInit(maiores);
+	regPrint(vec);
 	
-	r2.codigo_cliente = 2;
-	r2.codigo_produto = 1;
-	r2.quantidade = 21;
+	pipe(fd); //Criar Pipe
 	
-	r3.codigo_cliente = 20202;
-	r3.codigo_produto = 1;
-	r3.quantidade = 30;
-	
-	vec[0] = r1; vec[1] = r2; vec[2] = r3;
-	
-	for(i = 3; i < NUM_ELEM; i++){
-		vec[i] = r1;
-	}
-	
-	pipe(fd);
-	
+	//Criar filhos e distribuição
 	for(i = 0; i < NUM_PROC; i++){
-		p[i] = fork();
 		
+		p[i] = fork();
 		if(p[i] == 0){
 			close(fd[0]);
 			for(j = amp * i; j < amp*(i+1); j++){
@@ -55,16 +72,20 @@ int main(void){
 			close(fd[1]);
 			exit(0);
 		}
-		
-		read(fd[0], &rAux, sizeof(registo));
-		//falta metodo addRegisto(registo r)
-		printf("fdd: %d \n", rAux.codigo_cliente);
+				
 	}
-	close(fd[1]);	
+	close(fd[1]);
+	
+	//Leitura de registos e inserção no vec maiores
+	while(read(fd[0], &rAux, sizeof(registo)) !=0){
+		printf("nr: %d -> quant: %d \n", k, rAux.quantidade);
+		maiores[k] = rAux;
+		k++;
+	}
 	
 	for(i = 0; i < NUM_PROC; i++){
 		waitpid(p[i], &estado, 0);
 	}
-		
+
 	return 0;
 }
