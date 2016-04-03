@@ -21,10 +21,10 @@ int main(void){
 		close(fd[0]);
 		
 		printf("Pai = Hello world\n");
-		write(fd[1], msg , BUFFER_SIZE);
-		sleep(2); //Sleep do Pedro
+		write(fd[1], msg , strlen(msg));
+		//sleep(1); //Sleep do Pedro
 		printf("Pai = Goodbye\n");
-		write(fd[1], msg2, BUFFER_SIZE);
+		write(fd[1], msg2, strlen(msg));
 		close(fd[1]);
 	}	
 	if(p==0){
