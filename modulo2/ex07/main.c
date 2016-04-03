@@ -22,6 +22,7 @@ int main(void){
 	
 	pipe(fd);
 	
+	//Criar filhos e meter constantemente a tentar ler o pipe
 	for(i = 0; i < NUM_PROC; i++){
 		p[i] = fork();
 		if(p[i] == 0){
@@ -29,24 +30,28 @@ int main(void){
 			s sF;
 		
 			read(fd[0], &sF, BUFFER_SIZE);
-			printf("Mensagem: %s\nPid: %d\nRonda: %d\n---\n", sF.msg, getpid(), sF.ronda);
+			printf("Mensagem: %s\nPid: %d Ronda: %d\n---\n", sF.msg, getpid(), sF.ronda);
 			close(fd[0]);
-			exit(sF.ronda);
+			exit(sF.ronda); //envio da ronda em que conseguiu ler a msg
 		}
 	}
 	
+	//Envio das msg pelo pipe de 2 em 2 sec
 	for(i = 0; i < NUM_PROC; i++){
 		if(p[i] > 0){
 			s1.msg = "win";
 			s1.ronda = i+1;
+			
 			close(fd[0]);
 			write(fd[1], &s1, BUFFER_SIZE);
-			sleep(2);
+			
+			sleep(2); //intervalo de 2 seg
 		}
 	}
 	
 	close(fd[1]);
 	
+	//Leitura dos estados dos filhos e print
 	for(i = 0; i < NUM_PROC; i++){
 		waitpid(p[i], &estado, 0);
 		printf("Pid: %d Ronda: %d\n", p[i], WEXITSTATUS(estado));
