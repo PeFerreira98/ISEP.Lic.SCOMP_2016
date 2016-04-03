@@ -15,14 +15,18 @@ int main(void){
 	int matrix[NUM_PROC][2];
 	int vec1[NUM_ELEM], vec2[NUM_ELEM], i, j, aux, tot=0, estado;
 	
-	for(i = 0; i < NUM_ELEM; i++){//Preencher vectores
-		vec1[i] = 1;
+	//Preencher vectores
+	for(i = 0; i < NUM_ELEM; i++){
+		vec1[i] = 2;
 		vec2[i] = 2;
 	}
+	
+	//Criar Pipes
 	for(i = 0; i < NUM_PROC; i++){
 		pipe(matrix[i]);
 	}
 	
+	//ciclo de criação de filhos e respectivas somas/escritas nos pipes
 	for(i = 0; i < NUM_PROC; i++){
 		
 		p[i] = fork();
@@ -36,9 +40,15 @@ int main(void){
 			close(matrix[i][1]);
 			exit(0);				
 		}
+	}
+	
+	//ciclo de leitura de pipes
+	for (i = 0; i < NUM_PROC; i++)
+	{
 		read(matrix[i][0],&aux,sizeof(int));		
 		tot = tot + aux;
 	}
+	
 	
 	for(i = 0; i < NUM_PROC; i++){
 		waitpid(p[i], &estado, 0);
