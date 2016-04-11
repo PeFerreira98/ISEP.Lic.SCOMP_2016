@@ -22,7 +22,7 @@ void initArray(int *arr){
 	int i;
 	for (i = 0; i < NR_DISC; i++)
 	{
-		arr[i] = rand()%20;
+		arr[i] = rand()%21;
 	}
 }
 
