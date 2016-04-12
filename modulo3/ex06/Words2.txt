@@ -1,0 +1,161 @@
+SharedMemory
+Luís Nogueira            Nuno Pereira       Orlando Sousa
+Paulo Baltarejo       Pedro Oliveira       Luís Lino Ferreira
+André Oliveira          Carlos Gonçalves
+{lmn,nap,oms,pbs,ped,llf,lao,cag}@isep.ipp.pt
+Sistemas de Computadores
+2015/2016
+1.
+  Implement a solution that sends the number and name of a student between two
+processes not related hierarchically, a
+writer
+and a
+reader
+.
+
+The
+writer
+must create a shared memory area, read the data from the key-
+board and write them in the shared memory.
+
+The
+reader
+should read the data from the shared memory and print them on
+the screen.
+Note: the
+writer
+must be executed before the
+reader
+.
+2.
+  Implement a solution that allows you to share an array of 10 integers between two
+processes not related hierarchically, a
+writer
+and a
+reader
+.
+
+The
+writer
+must create a shared memory area, generate 10 random numbers
+between 1 and 20 and write them in the shared memory.
+
+The
+reader
+should read the 10 values, calculate and print the average.
+Note: the
+writer
+must be executed before the reader.
+3.
+  Implement a program that creates a shared memory area to store an integer, initi-
+alizes this value to 100, and creates a new process. Parent and child must perform
+the following operations 1000 times:
+
+Increase the value;
+
+Decrease the value;
+
+Write the value on the screen.
+Review the results. Will these results always be consistent?
+1
+4.
+  Implement a program to determine the biggest element of an array in a parallel/-
+concurrent environment.
+The parent process should:
+
+Create an array of 1000 integers, initializing it with random values between
+0 and 1000;
+
+Create a shared memory area to store an array of 10 integers, to be used for
+the local maximum determined by each child processe;
+
+Create 10 new processes;
+
+Wait until the 10 child processes to finish the search for the local maximum;
+
+Determine the global maximum;
+
+Eliminate the shared memory area.
+Each child process should:
+
+Calculate the largest element in the 100 positions;
+
+Write the value found in the position corresponding to the order number (0-
+9) in the array of local maximum.
+5.
+  Implement a program that allows the exchange of data concerning a student between
+two process (number, name and grades of a set of classes). The data to be exchan-
+ged are represented in the following
+struct          aluno
+:
+#define          STR_SIZE          50
+#define          NR_DISC          10
+struct          aluno{
+int          numero;
+char          nome[STR_SIZE];
+int          disciplinas[NR_DISC];
+};
+The parent process should:
+
+Create a shared memory area for data exchange.  Check the need to add one
+or more variables to synchronize the writing and reading of data operations;
+
+Create a new process;
+
+Fill the shared memory area in accordance with user-entered information;
+
+Wait until the child process ends.
+
+Eliminate the shared memory area.
+The child process should:
+
+Wait for the student data;
+
+Calculates the highest, the lowest and the average grade;
+
+Print the information on the screen.
+2
+6.
+  Implement a program that allows to optimize the search of words in a set of text
+files in parallel/concurrent environment.
+The parent process should:
+
+Create an area of shared memory.  The memory area must contain, for each
+child process, the following information:
+–
+path to the file;
+–
+word to search;
+–
+an integer to store the number of occurrences.
+
+Create 10 new processes;
+
+Fill the shared memory area with the information for each child process;
+
+Wait until the child processes finish their search;
+
+Print the number of occurrences determined by each child;
+
+Eliminate the shared memory area.
+Each child process should:
+
+Open the text file assigned to it by the parent (can/should be different for
+each child process);
+
+Determine the number of occurrences of the word to search;
+
+Write the number of occurrences in their position in the shared memory area.
+7.
+  Implement a program that creates a new process.  One will be the
+producer
+and
+the other the
+consumer
+.  Among them should be created a circular buffer to store
+10 integers and the necessary synchronization variables in a shared memory area.
+The
+producer
+puts increasing values in the buffer that should be printed by the
+consumer
+. Consider that 30 values are exchanged betwe
