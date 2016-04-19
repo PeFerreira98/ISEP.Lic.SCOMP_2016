@@ -86,10 +86,34 @@ int main(){
 			
 			//read & compare word (assumindo que cada palavra é menor que 20 letras)
 			while (fscanf(fp, " %19s", x) == 1) {
-				if(0 == strcmp(x, sd1->wordArray[i])){
-					puts(x);
-					sd1->ocurArray[i]++;
-				}
+				
+				int tamanho = strlen(x), tamOrig = strlen(sd1->wordArray[i]);
+				
+					/*for(j = 33; j < 48; j++){
+						if(x[0] == j){
+							x[0] = 0;
+						}
+						if(x[tamanho-1] == j){
+							x[tamanho-1] = 0;
+						}
+					}*/
+					
+					if(((x[0] < 'A' || (x[0] > 'Z' && x[0] < 'a')) || x[0] > 'z') && (x[0] < 0 || x[0] > 9)){
+						memmove(&x[0], &x[1], strlen(x));
+					}
+					
+					if(((x[tamanho-1] < 'A' || (x[tamanho-1] > 'Z' && x[tamanho-1] < 'a')) || x[tamanho-1] > 'z') && (x[0] < 0 || x[0] > 9)){
+						if(x[tamanho-1] < 0 || x[tamanho-1] > 9){
+							x[tamanho-1] = 0;
+						}
+					}
+				
+					if(0 == strcmp(x, sd1->wordArray[i])){
+						puts(x);
+						sd1->ocurArray[i]++;
+					}
+				
+				
 			}
 	
 			//close file and exit
