@@ -59,9 +59,10 @@ int main(){
 					execvp(atend2[0], atend2);
 					exit(-1);
 				}
+				if(opt==0)exit(0);
 			}
 			
-			if(opt != 0 && opt && 1 && opt != 2){
+			if(opt != 0 && opt != 1 && opt != 2){
 				printf("Opção invalida!\n");
 				sem_post(semProc);
 			}

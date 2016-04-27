@@ -42,7 +42,7 @@ int main(){
 		sem_post(semProc);	
 	//----
 	
-	if (munmap(sd1, dataSize) < 0) printf("\nError munmap!\n");
+	//if (munmap(sd1, dataSize) < 0) printf("\nError munmap!\n");
 	
 	return 0;
 }
