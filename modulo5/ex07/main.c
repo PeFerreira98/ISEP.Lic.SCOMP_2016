@@ -29,6 +29,7 @@ produto vec3[NUM_PRODUTOS];
 int index1;
 int index2;
 int index3;
+int globalMinResult;
 int globalResult;
 
 pthread_mutex_t hyperMutex[NUM_HIPERMERCADOS];
@@ -88,16 +89,28 @@ void *thread_counter(void * arg){
 			value += vec1[i].x;
 
 		if(pthread_mutex_lock(&globalMutex) != 0) error_message("pthread_mutex_lock");
-		if(value < index2 && value < index3) globalResult = 1;
+
+		if(globalMinResult > value || globalMinResult == 0){
+			globalResult = 1;
+			globalMinResult = value;
+		}
+
 		if(pthread_mutex_unlock(&globalMutex) != 0) error_message("pthread_mutex_unlock");
+
 	}
 
 	if(threadNum == 2){
 		for (int i = 0; i < NUM_PRODUTOS; ++i)
 			value += vec2[i].x;
 
+
 		if(pthread_mutex_lock(&globalMutex) != 0) error_message("pthread_mutex_lock");
-		if(value < index1 && value < index3) globalResult = 2;
+
+		if(globalMinResult > value || globalMinResult == 0){
+			globalResult = 2;
+			globalMinResult = value;
+		}
+
 		if(pthread_mutex_unlock(&globalMutex) != 0) error_message("pthread_mutex_unlock");
 	}
 
@@ -106,10 +119,15 @@ void *thread_counter(void * arg){
 			value += vec3[i].x;
 
 		if(pthread_mutex_lock(&globalMutex) != 0) error_message("pthread_mutex_lock");
-		if(value < index1 && value < index2) globalResult = 3;
-		if(pthread_mutex_unlock(&globalMutex) != 0) error_message("pthread_mutex_unlock");
-	} 
 
+		if(globalMinResult > value || globalMinResult == 0){
+			globalResult = 3;
+			globalMinResult = value;
+		}
+
+		if(pthread_mutex_unlock(&globalMutex) != 0) error_message("pthread_mutex_unlock");
+		
+	} 
 
 	pthread_exit((void*)NULL);
 }
@@ -148,11 +166,11 @@ void *thread_hyper(void *arg){
 		}
 	}
 
+	
 
-
-	//if (pthread_create(&thread_id, NULL, thread_hyper, &threadNum) != 0) error_message("pthread_create");
+	if (pthread_create(&thread_id, NULL, thread_counter, &threadNum) != 0) error_message("pthread_create");
 	//execute thread_count
-	//if (pthread_join(thread_id, NULL) != 0) error_message("pthread_join");
+	if (pthread_join(thread_id, NULL) != 0) error_message("pthread_join");
 
 	pthread_exit((void*)NULL);
 }
@@ -168,7 +186,7 @@ int main(){
 	init_array_mutex();
 	init_array_vecs();
 	index1 = 0; index2 = 0; index3 = 0;
-	globalResult = 0;
+	globalResult = 0; globalMinResult = 0;
 
 
 	//Thread Creation
